@@ -1,0 +1,144 @@
+/* components/DataCard.module.css */
+
+/* ============================================================
+   Base card container.
+   Used by every page: Home (sets), Search (cards), Set detail (cards).
+   ============================================================ */
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px 0;
+    background-color: #ffffff;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Subtle hover lift to signal interactivity. */
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================
+   Pokémon-card layout (used when `pokemonName` is set).
+   Switches the card from a vertical stack to a horizontal
+   "image on the left, text on the right" row.
+   ============================================================ */
+.card.hasImage {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* Signal clickability only for interactive (non-link) cards. */
+.card.hasImage[role="button"] {
+    cursor: pointer;
+}
+
+/* Visible focus ring for keyboard users. */
+.card.hasImage[role="button"]:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+}
+
+/* ============================================================
+   Image panel — fixed 80×80 square with a soft background.
+   `flex: 0 0 80px` prevents the panel from shrinking if the
+   text next to it becomes long.
+   ============================================================ */
+.imageWrapper {
+    flex: 0 0 80px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Max-Width-for-Images
+    The parent .imageWrapper (a div, not an img) still constrains the visible box to 80×80.*/
+.pokemonImage {
+    max-width: 100%;
+    display: block;
+}
+
+/* Shown while loading, or when Wikipedia has no image for the name. */
+.imagePlaceholder {
+    color: #999999;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* ============================================================
+   Text column — occupies the remaining space after the image.
+   `min-width: 0` allows long words to wrap in flex context.
+   ============================================================ */
+.text {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Card title (the name of a set or Pokémon). */
+.title {
+    margin: 0 0 8px 0;
+    font-size: 1.2rem;
+    color: #1a1a1a;
+}
+
+/* Card subtitle (metadata line under the title). */
+.subtitle {
+    margin: 0;
+    color: #666666;
+    font-size: 0.95rem;
+}
+
+/* ============================================================
+   Collapsible info panel.
+   Default state: collapsed (max-height 0, hidden, faded out).
+   Expanded state: applied on :hover and when the card is .pinned.
+   ============================================================ */
+.info {
+    max-height: 0;                 /* clip content to zero height */
+    opacity: 0;
+    overflow: hidden;              /* hide text during the transition */
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 1px solid transparent;  /* reserve the border for animation */
+    transition:
+            max-height 0.25s ease-out,
+            opacity 0.2s ease-out,
+            margin-top 0.2s ease-out,
+            padding-top 0.2s ease-out,
+            border-top-color 0.2s ease-out;
+}
+
+/* Expanded: on hover, or when explicitly pinned by a click.
+   `max-height: 500px` is generous enough to fit most summaries. */
+.card.hasImage:hover .info,
+.card.hasImage.pinned .info {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top-color: #eeeeee;
+}
+
+/* The Wikipedia summary paragraph itself. */
+.extract {
+    color: #444444;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin: 0;
+}
+
+/* ============================================================
+   Wrapper used when the card is rendered as a <Link>.
+   Removes the default blue underline and inherits text color.
+   ============================================================ */
+.linkWrapper {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}

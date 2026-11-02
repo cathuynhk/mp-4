@@ -1,69 +1,102 @@
-import Image from "next/image";
+// app/page.tsx
+import { Suspense } from "react";
+import { fetchSets, PokemonSet, LANGUAGES } from "@/lib/api";
+import DataCard from "@/components/DataCard";
 import styles from "./page.module.css";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+export default function Home({
+                                 searchParams,
+                             }: {
+    // Do NOT await searchParams here. Pass the Promise down instead.
+    searchParams: Promise<{ lang?: string }>;
+}) {
+    return (
+        <main className={styles.main}>
+            <h1 className={styles.heading}>Pokémon TCG Sets</h1>
+            <p className={styles.description}>
+                Browse the newest sets. The free tier supports English; other
+                languages require a paid plan — try them to see how the API responds.
+            </p>
+
+            {/*
+                The form still submits as GET, so the URL becomes /?lang=<code>.
+                The static shell (heading, description, form) renders instantly.
+            */}
+            <form action="/" method="GET" className={styles.langForm}>
+                <label htmlFor="lang" className={styles.langLabel}>
+                    Language:
+                </label>
+                <select
+                    id="lang"
+                    name="lang"
+                    // We cannot know the selected lang without awaiting.
+                    // Use "en" as the default in the static shell.
+                    defaultValue="en"
+                    className={styles.langSelect}
+                >
+                    {LANGUAGES.map((l) => (
+                        <option key={l.code} value={l.code}>
+                            {l.label}
+                        </option>
+                    ))}
+                </select>
+                <button type="submit" className={styles.langButton}>
+                    Load
+                </button>
+            </form>
+
+            {/*
+                Pass the searchParams Promise into the child.
+                The child awaits it inside this Suspense boundary.
+            */}
+            <Suspense fallback={<p>Loading sets…</p>}>
+                <SetsList searchParams={searchParams} />
+            </Suspense>
+        </main>
+    );
+}
+
+async function SetsList({
+                            searchParams,
+                        }: {
+    searchParams: Promise<{ lang?: string }>;
+}) {
+    // Await the Promise here, INSIDE the Suspense boundary.
+    const { lang: langParam } = await searchParams;
+    const lang = langParam || "en";
+
+    let sets: PokemonSet[] = [];
+    let errorMessage: string | null = null;
+
+    try {
+        sets = await fetchSets(lang, 10);
+    } catch (err: any) {
+        errorMessage = err.message || "An unknown error occurred.";
+    }
+
+    if (errorMessage) {
+        return (
+            <div className={styles.errorBox}>
+                <p className={styles.errorText}>⚠️ {errorMessage}</p>
+                <p>Please check your API key or try again later.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles.list}>
+            {sets.length === 0 ? (
+                <p>No sets returned for "{lang}".</p>
+            ) : (
+                sets.map((set) => (
+                    <DataCard
+                        key={set.id}
+                        title={set.name}
+                        subtitle={`${set.id}${set.total ? ` • ${set.total} cards` : ""}`}
+                        href={`/sets/${encodeURIComponent(set.id)}`}
+                    />
+                ))
+            )}
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    );
 }

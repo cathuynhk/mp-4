@@ -1,0 +1,77 @@
+/* app/sets/[setId]/setDetail.module.css */
+
+/* ============================================================
+   yellow notice shown at the top of every set page.
+   Sits above the back link and outside <Suspense>, so it
+   appears instantly even while the set data is loading.
+   ============================================================ */
+.loadNote {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    color: #856404;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+/* Centered, width-limited page container. */
+.main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Set name heading. */
+.heading {
+    color: #1a1a1a;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* "Cards in this set" heading. */
+.subheading {
+    color: #333333;
+    margin-top: 2rem;
+}
+
+/* Metadata paragraph (ID, series, counts, release date). */
+.description {
+    color: #555555;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+/* Container for the card list. */
+.list {
+    margin-top: 1rem;
+}
+
+/* Back navigation link at the top and bottom of the page. */
+.backLink {
+    color: #1976d2;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.backLink:hover {
+    text-decoration: underline;
+}
+
+/* Red error banner shown when the API call fails. */
+.errorBox {
+    background-color: #fde8e8;
+    border-left: 4px solid #d32f2f;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.errorText {
+    color: #d32f2f;
+    font-weight: 500;
+    margin: 0;
+}

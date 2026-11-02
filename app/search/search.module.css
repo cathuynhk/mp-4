@@ -1,0 +1,94 @@
+/* app/search/search.module.css */
+
+/* Centered, width-limited page container. */
+.main {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Page title. */
+.heading {
+    color: #1a1a1a;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 0.5rem;
+}
+
+/* Explanatory line under the title. */
+.hint {
+    color: #555555;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+/* Search form layout: input, select, and button in a row. */
+.searchForm {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.searchInput {
+    flex-grow: 1;
+    min-width: 200px;
+    padding: 0.75rem;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.searchSelect {
+    padding: 0.75rem;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: white;
+}
+
+.searchButton {
+    padding: 0.75rem 1.5rem;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.searchButton:hover {
+    background-color: #1565c0;
+}
+
+/* Container around the list of result cards. */
+.results {
+    margin-top: 2rem;
+}
+
+/* Back navigation link. */
+.backLink {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #1976d2;
+    text-decoration: none;
+}
+
+.backLink:hover {
+    text-decoration: underline;
+}
+
+/* Error banner. */
+.errorBox {
+    background-color: #fde8e8;
+    border-left: 4px solid #d32f2f;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.errorText {
+    color: #d32f2f;
+    font-weight: 500;
+    margin: 0;
+}
